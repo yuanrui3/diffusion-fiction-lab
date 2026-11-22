@@ -1,0 +1,13 @@
+{
+ "target_distinct": 6.85,
+ "chosen": {
+  "dream": 0.5,
+  "llada": 0.7
+ },
+ "canvas_slack": 6,
+ "slack_mean_all_rules": {
+  "4": 0.28437500000000004,
+  "6": 0.3046875,
+  "8": 0.2703125
+ }
+}

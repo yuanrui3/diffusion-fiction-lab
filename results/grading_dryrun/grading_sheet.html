@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回目 grading sheet</title>
+<style>
+  :root { --bg:#faf8f4; --card:#ffffff; --ink:#1f1d1a; --muted:#6b665e; --line:#e3ded4; --accent:#8a3b12; --mark:#fff3d6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#181715; --card:#22201d; --ink:#ece8e1; --muted:#a39d92; --line:#3a3631; --accent:#e0a070; --mark:#4a3a18; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 "Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif; }
+  header, main { max-width: 760px; margin: 0 auto; padding: 16px; }
+  h1 { font: 600 20px/1.3 system-ui, sans-serif; margin: 8px 0; }
+  p.note, .ui { font: 14px/1.5 system-ui, sans-serif; color: var(--muted); }
+  .bar { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 16px; z-index: 2; }
+  .bar div { max-width: 760px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  button { font: 14px system-ui, sans-serif; padding: 6px 12px; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 6px; cursor: pointer; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 16px 0; }
+  .card.done { border-color: var(--accent); }
+  .num { font: 600 13px system-ui, sans-serif; color: var(--muted); }
+  .summary { color: var(--muted); font-size: 15px; margin: 6px 0 12px; }
+  .couplet { font-size: 22px; letter-spacing: 0.12em; margin: 4px 0; }
+  .couplet .tag { font: 12px system-ui, sans-serif; letter-spacing: 0; color: var(--muted); margin-right: 8px; }
+  .couplet.judged span.line { background: var(--mark); padding: 0 4px; border-radius: 4px; }
+  .scores { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 8px; }
+  .scores label { font: 14px system-ui, sans-serif; border: 1px solid var(--line); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+  .scores input { display: none; }
+  .scores input:checked + span { font-weight: 700; color: var(--accent); }
+  .scores label:has(input:checked) { border-color: var(--accent); }
+  textarea { width: 100%; min-height: 44px; font: 15px/1.5 inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; }
+</style>
+</head>
+<body>
+<div class="bar"><div>
+  <span class="ui" id="progress"></span>
+  <button id="export">Export grades.json</button>
+</div></div>
+<header>
+  <h1>回目 grading sheet</h1>
+  <p class="note">9 lines to grade. Each card shows the chapter summary and a couplet. One line is the original and was given to the model; the highlighted line was written by a model. Score the highlighted line for literary quality, 1 to 5, as a line of this couplet. Which model wrote it is hidden, and the order is shuffled.</p>
+  <p class="note">Suggested anchors: 1 broken or meaningless · 2 reads, but flat or off the chapter · 3 acceptable · 4 good · 5 could stand as the chapter's 回目. Comments are optional. Your marks are saved in this browser as you go; press Export when done and put <code>grades.json</code> in <code>results/grading/</code>.</p>
+</header>
+<main id="cards"></main>
+<script>
+const ENTRIES = [{"entry": "e01", "summary": "徐敬业在扬州起兵讨伐武则天，骆宾王为他起草檄文，兵败之后两家子弟各自逃散。骆宾王临难前写信给朋友，把儿子的下落托付给他。", "first": "徐英公传檄起义兵", "second": "骆临海遗书托后人", "judged": "second"}, {"entry": "e02", "summary": "唐小山夜里同叔叔唐敏闲谈，问朝廷既然是武后当政，会不会也开女子的科考。她父亲唐敖中了探花又被革去，出门散心，在一座古庙里梦见一位老者，指点他到海外寻访流落的名花，积下功德。", "first": "女公子夜半话科场", "second": "老书生梦中闻善果", "judged": "first"}, {"entry": "e03", "summary": "唐小山夜里同叔叔唐敏闲谈，问朝廷既然是武后当政，会不会也开女子的科考。她父亲唐敖中了探花又被革去，出门散心，在一座古庙里梦见一位老者，指点他到海外寻访流落的名花，积下功德。", "first": "老书生海外访名花", "second": "老书生梦中闻善果", "judged": "first"}, {"entry": "e04", "summary": "林之洋进女儿国王宫卖货，被国王看中，留在宫里封作王妃。一班长着胡须的宫娥给他穿耳、裹脚，他疼得受不住，偷偷放开，又挨了板子。", "first": "粉面郎缠足受困", "second": "宫中流出，被板子打", "judged": "second"}, {"entry": "e05", "summary": "徐敬业在扬州起兵讨伐武则天，骆宾王为他起草檄文，兵败之后两家子弟各自逃散。骆宾王临难前写信给朋友，把儿子的下落托付给他。", "first": "徐英公传檄起义兵", "second": "骆宾王寄书托子友", "judged": "second"}, {"entry": "e06", "summary": "林之洋进女儿国王宫卖货，被国王看中，留在宫里封作王妃。一班长着胡须的宫娥给他穿耳、裹脚，他疼得受不住，偷偷放开，又挨了板子。", "first": "粉面郎缠足受困", "second": "红颜女穿耳遭痛", "judged": "second"}, {"entry": "e07", "summary": "徐敬业在扬州起兵讨伐武则天，骆宾王为他起草檄文，兵败之后两家子弟各自逃散。骆宾王临难前写信给朋友，把儿子的下落托付给他。", "first": "徐英公传檄起义兵", "second": "驼宾王写信托子", "judged": "second"}, {"entry": "e08", "summary": "唐小山夜里同叔叔唐敏闲谈，问朝廷既然是武后当政，会不会也开女子的科考。她父亲唐敖中了探花又被革去，出门散心，在一座古庙里梦见一位老者，指点他到海外寻访流落的名花，积下功德。", "first": "唐小山夜中问叔，是否开女", "second": "老书生梦中闻善果", "judged": "first"}, {"entry": "e09", "summary": "林之洋进女儿国王宫卖货，被国王看中，留在宫里封作王妃。一班长着胡须的宫娥给他穿耳、裹脚，他疼得受不住，偷偷放开，又挨了板子。", "first": "粉面郎缠足受困", "second": "青丝客蓄髯遭疼", "judged": "second"}];
+const KEY = "huimu-grades-dev-20261119";
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+function store() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} update(); }
+function update() {
+  const done = ENTRIES.filter(e => saved[e.entry] && saved[e.entry].score).length;
+  document.getElementById("progress").textContent = done + " of " + ENTRIES.length + " graded";
+  ENTRIES.forEach(e => document.getElementById("card-" + e.entry).classList.toggle("done", !!(saved[e.entry] && saved[e.entry].score)));
+}
+const main = document.getElementById("cards");
+ENTRIES.forEach((e, i) => {
+  const card = document.createElement("div");
+  card.className = "card"; card.id = "card-" + e.entry;
+  const row = (tag, text, judged) => '<div class="couplet' + (judged ? ' judged' : '') + '"><span class="tag">' + tag + (judged ? ' · to grade' : ' · given') + '</span><span class="line">' + text + '</span></div>';
+  let scores = "";
+  for (let s = 1; s <= 5; s++) scores += '<label><input type="radio" name="s-' + e.entry + '" value="' + s + '"><span>' + s + '</span></label>';
+  card.innerHTML = '<div class="num">' + (i + 1) + ' / ' + ENTRIES.length + '</div>' +
+    '<div class="summary">' + e.summary + '</div>' +
+    row("上句", e.first, e.judged === "first") + row("下句", e.second, e.judged === "second") +
+    '<div class="scores">' + scores + '</div>' +
+    '<textarea placeholder="comment (optional)"></textarea>';
+  main.appendChild(card);
+  const prev = saved[e.entry] || {};
+  card.querySelectorAll("input").forEach(inp => {
+    if (String(prev.score) === inp.value) inp.checked = true;
+    inp.addEventListener("change", () => { saved[e.entry] = Object.assign(saved[e.entry] || {}, {score: Number(inp.value)}); store(); });
+  });
+  const ta = card.querySelector("textarea");
+  ta.value = prev.comment || "";
+  ta.addEventListener("input", () => { saved[e.entry] = Object.assign(saved[e.entry] || {}, {comment: ta.value}); store(); });
+});
+update();
+document.getElementById("export").addEventListener("click", () => {
+  const out = {sheet: "dev-20261119", exported: new Date().toISOString(),
+               grades: ENTRIES.map(e => ({entry: e.entry, score: (saved[e.entry] || {}).score || null, comment: (saved[e.entry] || {}).comment || ""}))};
+  const blob = new Blob([JSON.stringify(out, null, 1)], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "grades.json"; a.click();
+});
+</script>
+</body>
+</html>

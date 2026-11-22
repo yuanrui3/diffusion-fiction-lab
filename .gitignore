@@ -1,0 +1,25 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# model weights never go in the repo (they live in the Hugging Face cache)
+models/
+*.safetensors
+*.bin
+*.gguf
+
+# raw downloads that can be rebuilt by scripts/
+data/raw/
+
+# the unblinding key for the grading sheet stays out of sight until grading is done
+results/grading/KEY_DO_NOT_OPEN.json
+
+# OS noise
+Thumbs.db
+.DS_Store
+
+# keys of grading sheets stay out of git until grading is done
+results/grading_dryrun/KEY_DO_NOT_OPEN.json
