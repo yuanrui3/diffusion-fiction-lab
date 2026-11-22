@@ -451,6 +451,10 @@ The author asked to commit and push. A scan before staging found no email addres
 
 `runs/full/` is being written by the full run, so it is left alone and not committed yet; the same rewrite is applied to it after the run ends. `scripts/run_generation.py` (frozen) still records absolute paths when given them; it is not changed during phase 1.
 
+First commit `e28fd9f`, pushed on 2026-11-21 to the public repo https://github.com/yuanrui3/diffusion-fiction-lab (the author's choice: public, under yuanrui3, commits under the GitHub no-reply address). Created with the GitHub CLI (kept in `../_tools/gh/`), signed in by the author.
+
+At the author's request the repo is licensed MIT (`LICENSE`, copyright holder given as the GitHub account yuanrui3). `NOTICE.md` lists the material derived from other sources (Wikisource, model licences), whose terms the MIT licence does not replace.
+
 ### 28. Analysis plan for the full run (planned; to be frozen with the settings)
 
 Written before any test item has been generated on.
