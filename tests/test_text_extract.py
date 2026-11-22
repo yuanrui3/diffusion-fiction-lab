@@ -8,12 +8,12 @@ from dfl.text import count_hanzi, hanzi_only, is_hanzi, is_pure_hanzi
 
 def test_count_hanzi_counts_only_hanzi():
     assert count_hanzi("嬢嬢热抱屋头那个") == 8
-    assert count_hanzi("下句：师傅，隔海!abc 123") == 6
+    assert count_hanzi("下句：渔翁，临水!abc 123") == 6
     assert count_hanzi("") == 0
 
 
 def test_hanzi_only_drops_everything_else():
-    assert hanzi_only("下句：师傅，隔海!") == "下句师傅隔海"
+    assert hanzi_only("下句：渔翁，临水!") == "下句渔翁临水"
     assert hanzi_only("　 \n") == ""
 
 
@@ -23,23 +23,23 @@ def test_ideographic_zero_is_a_hanzi():
 
 
 def test_is_pure_hanzi():
-    assert is_pure_hanzi("师傅隔海讲油温")
+    assert is_pure_hanzi("渔翁临水听潮声")
     assert not is_pure_hanzi("")
-    assert not is_pure_hanzi("师傅 隔海")
-    assert not is_pure_hanzi("师傅隔海，讲油温")
-    assert not is_pure_hanzi("师傅隔海讲油温A")
+    assert not is_pure_hanzi("渔翁 临水")
+    assert not is_pure_hanzi("渔翁临水，听潮声")
+    assert not is_pure_hanzi("渔翁临水听潮声A")
 
 
 def test_is_hanzi_rejects_punctuation_and_strings():
     assert not is_hanzi("，")
     assert not is_hanzi("a")
-    assert not is_hanzi("师傅")
+    assert not is_hanzi("渔翁")
 
 
 # ---------------------------------------------------------------- extraction
 
-LINE = "师傅隔海讲油温"
-GIVEN = "外婆借身炸米饺"
+LINE = "渔翁临水听潮声"
+GIVEN = "船客登楼望远山"
 
 
 def test_plain_line():
@@ -100,8 +100,8 @@ def test_only_punctuation_reply():
 
 
 def test_internal_punctuation_is_kept_and_marks_the_answer_impure():
-    e = extract_answer("师傅隔海，讲油温", "second")
-    assert e.answer == "师傅隔海，讲油温"
+    e = extract_answer("渔翁临水，听潮声", "second")
+    assert e.answer == "渔翁临水，听潮声"
     assert not e.pure and e.n_hanzi == 7
 
 

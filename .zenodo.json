@@ -1,0 +1,12 @@
+{
+  "title": "Diffusion Fiction Lab: Chinese Chapter-Heading Couplets",
+  "version": "v0.1.0",
+  "description": "<p>A curated release of the code, development and recall data, and retained development results for a study of Chinese chapter-heading couplets.</p><p>The unseen dataset and grading dry runs are excluded. Original project materials are MIT-licensed. Wikisource-derived material retains attribution and its documented source terms, including CC BY-SA 4.0 for contributions. See NOTICE.md.</p>",
+  "creators": [
+    {
+      "name": "Chen, Yuanrui"
+    }
+  ],
+  "license": "MIT",
+  "upload_type": "software"
+}

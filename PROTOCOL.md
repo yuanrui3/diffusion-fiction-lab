@@ -1,5 +1,11 @@
 # Protocol log
 
+> **Archive scope.** This release contains the code, development and recall data, and
+> retained development results. The unseen dataset and grading dry run are excluded,
+> along with excerpts from them in this log. The original frozen plan and checksum list
+> document the full study. Running that plan or verifying all of its hashes requires the
+> separate unseen dataset.
+
 Lab notebook for phase 1 (回目 couplets). Entries are in order and are not rewritten; corrections are new entries. "Decided" means in force. "Planned" means proposed and still open until the freeze entry that will precede the full run.
 
 ---
@@ -150,22 +156,8 @@ Review of the 43 summaries by the main session:
 
 - Automatic check: all 43 have 2–3 sentences and 84–109 汉字. The only runs of three or more characters shared with a 回目 are personal names (伊内丝, 萨凡纳, 莉迪娅, 阿丝玛, 蒲嬢嬢, 以斯拉, 布雷登, 徐好翔, 路易斯, 优素福). No other exceptions were needed.
 - Fact spot-check against the chapter text, by text search: 17 details from 15 chapters (figures, names, objects). All were found in the text as the summaries state them, except that one figure was written 二百六十 where the book has 两百六十 (edited, below). Some of these checks are weak (a name merely occurring in the chapter). This is a spot-check, not a full verification; the author will spot-check more.
-- Three edits in review, each to wording only:
-  - ch. 2: “茶铺耍起替美国人上的远程夜班” → “耍起茶铺替美国人上的远程夜班” (耍起 is the tea house's name; the original order read as a verb).
-  - ch. 4: “科琳罚他撒谎，” → “科琳为这句谎话罚他，” (the original could be read as "made him lie as a punishment").
-  - ch. 19: “二百六十毫秒” → “两百六十毫秒” (the book's own wording).
-- Raw, unedited agent output stays in `data/unseen/summaries_raw/`.
-
-Summarisers' notes worth the author's eye (the summaries follow the chapter text, not the 回目, where the two differ):
-
-- ch. 25 “坐到底”: in the text 唐蕾 says she will not ride to the terminus.
-- ch. 26 “隔屏”: the negotiation is a phone call on speaker, not a video call.
-- ch. 30 “连夜”: the medicine is made up between 3 and 5 in the afternoon. “头回”: the text does not say it is the first time.
-- ch. 31 “五点”: the light goes on at half past five.
-- ch. 17: both lines of the 回目 point to the same thread, not two.
-- ch. 40: the 回目 says 优素福; the chapter text calls him 迦勒 throughout. The summary gives both names.
-- ch. 33: that 张磊 is 张一帆's father is established in other chapters, not in this one.
-- ch. 12: “吻别” in the summary is inferred from the line after the three blank lines.
+- Three wording edits corrected phrasing or brought the summaries into line with the text.
+- Raw summaries and item-level review notes are outside the release archive.
 
 ### 12. Code written but not yet run
 
@@ -430,9 +422,9 @@ Estimated GPU time for the full run, from the pilot's timings: Qwen 25 minutes, 
 
 On 2026-11-19 a test of `make_grading_sheet.py` built a 9-line sheet from the **smoke-test** outputs (3 dev items of 《镜花缘》, old settings: prompt v1, vendor-default temperatures, slack 4) and opened it in the app's browser pane to check that it rendered. The file was deleted afterwards, but the pane kept showing it. The author took it for the real sheet and graded all 9 lines. The mistake was mine: a test page was left in front of the author.
 
-What was done: the 9 scores were read from the open page; the dry-run sheet was regenerated from the same inputs and seed; every entry code and line matched what the author graded. The scores are saved in `results/grading_dryrun/grades.json` and unblinded with `scripts/unblind.py`, which doubles as an end-to-end test of the grading and unblinding steps. Result in `results/grading_dryrun/grades_report.md`: Qwen 4, 4, 4; LLaDA 3, 2, 4; Dream 2, 1, 1.
-
-These 9 grades are **not** part of the study: dev items, superseded settings, three cells. They say only that the sheet works and that the author's scale separates broken lines (Dream's two-clause replies got 1) from usable ones. One observation worth keeping for the real grading: the author gave 4 to a LLaDA line that fails the end-tone rule (红颜女穿耳遭痛: a second line must end 平, and 痛 is 仄), so grade and rules do not coincide.
+The sheet was regenerated with the same inputs and seed. All nine entries matched,
+and the grading and unblinding scripts completed end to end. The dry-run outputs and
+individual grades are excluded from this release. They were never part of the study.
 
 The real sheet (51 lines from the unseen set) is built only after the full run, which has not started.
 

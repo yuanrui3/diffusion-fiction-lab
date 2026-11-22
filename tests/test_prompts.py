@@ -17,9 +17,9 @@ def test_chinese_numeral_out_of_range(n):
 
 
 def test_forward_prompt_with_summary_states_every_checked_rule():
-    p = build_prompt("外婆借身炸米饺", FORWARD, 7, "除夕夜摆了年夜饭。", version="v1")
-    assert "梗概：除夕夜摆了年夜饭。" in p
-    assert "上句：外婆借身炸米饺" in p
+    p = build_prompt("船客登楼望远山", FORWARD, 7, "船客泊在渡口，渔翁坐在岸边。", version="v1")
+    assert "梗概：船客泊在渡口，渔翁坐在岸边。" in p
+    assert "上句：船客登楼望远山" in p
     assert "下句必须正好七个字" in p            # length, in characters
     assert "对仗" in p                          # parallelism
     assert "下句须以平声字收尾" in p            # end tone of the line to be written
@@ -30,8 +30,8 @@ def test_forward_prompt_with_summary_states_every_checked_rule():
 
 
 def test_reverse_prompt_swaps_the_roles():
-    p = build_prompt("师傅隔海讲油温", REVERSE, 7, "除夕夜摆了年夜饭。")
-    assert "下句：师傅隔海讲油温" in p
+    p = build_prompt("渔翁临水听潮声", REVERSE, 7, "船客泊在渡口，渔翁坐在岸边。")
+    assert "下句：渔翁临水听潮声" in p
     assert "请补出上句" in p
     assert "上句必须正好七个字" in p
     assert "上句须以仄声字收尾" in p
@@ -57,14 +57,14 @@ def test_prompt_never_asserts_the_tone_of_the_given_line():
 
 
 def test_prompt_is_the_same_text_for_the_same_item():
-    a = build_prompt("外婆借身炸米饺", FORWARD, 7, "梗概。")
-    assert a == build_prompt("外婆借身炸米饺", FORWARD, 7, "梗概。")
-    assert a != build_prompt("外婆借身炸米饺", FORWARD, 8, "梗概。")
+    a = build_prompt("船客登楼望远山", FORWARD, 7, "梗概。")
+    assert a == build_prompt("船客登楼望远山", FORWARD, 7, "梗概。")
+    assert a != build_prompt("船客登楼望远山", FORWARD, 8, "梗概。")
 
 
 def test_invalid_direction():
     with pytest.raises(ValueError):
-        build_prompt("外婆借身炸米饺", "sideways", 7)
+        build_prompt("船客登楼望远山", "sideways", 7)
 
 
 def test_wanted_line():
@@ -86,9 +86,9 @@ def test_item_seed_is_stable_and_separates_everything():
 
 
 def test_v2_has_the_same_rules_and_ends_with_the_empty_slot():
-    v1 = build_prompt("外婆借身炸米饺", FORWARD, 7, "除夕夜摆了年夜饭。", version="v1")
-    v2 = build_prompt("外婆借身炸米饺", FORWARD, 7, "除夕夜摆了年夜饭。", version="v2")
-    assert v2.endswith("梗概：除夕夜摆了年夜饭。\n上句：外婆借身炸米饺\n下句：")
+    v1 = build_prompt("船客登楼望远山", FORWARD, 7, "船客泊在渡口，渔翁坐在岸边。", version="v1")
+    v2 = build_prompt("船客登楼望远山", FORWARD, 7, "船客泊在渡口，渔翁坐在岸边。", version="v2")
+    assert v2.endswith("梗概：船客泊在渡口，渔翁坐在岸边。\n上句：船客登楼望远山\n下句：")
     for piece in ("下句必须正好七个字", "对仗", "下句须以平声字收尾", "不要重复上句用过的字", "内容要切合梗概",
                   "只写出下句本身，不加标点，不作解释。"):
         assert piece in v1 and piece in v2
@@ -104,11 +104,11 @@ def test_v2_reverse_and_bare():
 
 def test_unknown_prompt_version():
     with pytest.raises(ValueError):
-        build_prompt("外婆借身炸米饺", FORWARD, 7, version="v3")
+        build_prompt("船客登楼望远山", FORWARD, 7, version="v3")
 
 
 def test_default_layout_is_the_frozen_one():
     from dfl.prompts import PROMPT_VERSION
 
     assert PROMPT_VERSION == "v2"
-    assert build_prompt("外婆借身炸米饺", FORWARD, 7) == build_prompt("外婆借身炸米饺", FORWARD, 7, version="v2")
+    assert build_prompt("船客登楼望远山", FORWARD, 7) == build_prompt("船客登楼望远山", FORWARD, 7, version="v2")

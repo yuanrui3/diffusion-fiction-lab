@@ -6,9 +6,9 @@ from dfl.checker import (
 )
 from dfl.tones import BOTH, PING, UNKNOWN, ZE, Pingshui
 
-# A couplet from the unseen set that keeps every rule: 睡 is tone 4, 还 tone 2.
-FIRST = "十年沙发白白睡"
-SECOND = "一夜床铺统统还"
+# A synthetic couplet that keeps every rule: 睡 is tone 4, 还 tone 2.
+FIRST = "三更舟中悄悄睡"
+SECOND = "数日街头缓缓还"
 
 PS = Pingshui({
     "睡": "去", "还": "平", "白": "入", "去": "去", "锁": "上", "庄": "平",
@@ -30,13 +30,13 @@ def run(given, answer, direction, **kw):
 # ---------------------------------------------------------------- rule 3 helper
 
 def test_repeat_at_a_different_position_is_a_violation():
-    assert repeated_characters("十年门一夜上锁", "一桌牌四人连庄") == ["一"]
-    assert repeated_characters("蒲青隔墙咬手腕", "老蒲抢拍下腰花") == ["蒲"]
+    assert repeated_characters("半扇门一更上锁", "一席棋两客连庄") == ["一"]
+    assert repeated_characters("蒲二隔窗敲木鼓", "老蒲开伞折梅花") == ["蒲"]
 
 
 def test_repeat_at_the_same_position_is_allowed():
-    assert repeated_characters("王鹏借壳给老邓洗澡", "铁子拜师替老蒲打荷") == []
-    assert same_position_count("王鹏借壳给老邓洗澡", "铁子拜师替老蒲打荷") == 1
+    assert repeated_characters("方生借笔给老师修书", "小童搬箧替老陈剪纸") == []
+    assert same_position_count("方生借笔给老师修书", "小童搬箧替老陈剪纸") == 1
 
 
 def test_same_position_exception_needs_every_occurrence_to_line_up():
@@ -47,7 +47,7 @@ def test_same_position_exception_needs_every_occurrence_to_line_up():
 
 
 def test_no_shared_characters():
-    assert repeated_characters("乐子望门门大敞", "冉峥报色色初黄") == []
+    assert repeated_characters("花影临窗窗正启", "竹声入夜夜微凉") == []
 
 
 def test_several_violations_are_listed_in_order():
@@ -75,12 +75,12 @@ def test_reverse_all_rules_pass():
 
 def test_wrong_end_tone_fails_only_the_tone_rule():
     # A second line that ends 仄.
-    r = run(FIRST, "一夜床铺统统去", FORWARD)
+    r = run(FIRST, "数日街头缓缓去", FORWARD)
     assert r["rule_length"] and r["rule_no_repeat"]
     assert not r["rule_tone_modern"] and not r["rule_tone_classical"]
     assert not r["all_rules_modern"]
     # A first line that ends 平.
-    r = run(SECOND, "十年沙发白白温", REVERSE)
+    r = run(SECOND, "三更舟中悄悄温", REVERSE)
     assert not r["rule_tone_modern"] and not r["all_rules_modern"]
 
 
@@ -97,13 +97,13 @@ def test_entering_tone_splits_modern_from_classical():
 
 
 def test_character_in_both_classical_classes_passes_either_way():
-    assert run(FIRST, "一夜床铺统统看", FORWARD)["rule_tone_classical"] is True
-    assert run(SECOND, "十年沙发白白看", REVERSE)["rule_tone_classical"] is True
-    assert run(FIRST, "一夜床铺统统看", FORWARD)["end_classical_class"] == BOTH
+    assert run(FIRST, "数日街头缓缓看", FORWARD)["rule_tone_classical"] is True
+    assert run(SECOND, "三更舟中悄悄看", REVERSE)["rule_tone_classical"] is True
+    assert run(FIRST, "数日街头缓缓看", FORWARD)["end_classical_class"] == BOTH
 
 
 def test_character_missing_from_the_table_falls_back_to_modern():
-    r = run(FIRST, "一夜床铺统统郎", FORWARD)      # 郎 is not in the fixture table
+    r = run(FIRST, "数日街头缓缓郎", FORWARD)      # 郎 is not in the fixture table
     assert r["tone_classical_fallback"] is True
     assert r["rule_tone_classical"] == r["rule_tone_modern"] is True
     assert r["end_classical_class"] == UNKNOWN
@@ -117,12 +117,12 @@ def test_without_a_table_classical_equals_modern():
 
 def test_the_given_line_is_never_blamed_for_its_own_tone():
     # The given first line ends 平 (it breaks the rule); the answer is still judged fairly.
-    r = run("十年沙发白白温", SECOND, FORWARD)
+    r = run("三更舟中悄悄温", SECOND, FORWARD)
     assert r["rule_tone_modern"] and r["all_rules_modern"]
 
 
 def test_too_short_and_too_long_fail_length_and_have_no_position_scores():
-    for answer in ("一夜床铺统还", "一夜床铺统统统还"):
+    for answer in ("数日街头缓还", "数日街头缓缓缓还"):
         r = run(FIRST, answer, FORWARD)
         assert not r["rule_length"] and not r["all_rules_modern"]
         assert r["rule_tone_modern"]                    # still told the tone was right
@@ -130,7 +130,7 @@ def test_too_short_and_too_long_fail_length_and_have_no_position_scores():
 
 
 def test_stray_punctuation_fails_length_but_tone_and_repeats_are_still_judged():
-    r = run(FIRST, "一夜床铺，统统还", FORWARD)
+    r = run(FIRST, "数日街头，缓缓还", FORWARD)
     assert not r["pure"] and not r["rule_length"] and not r["all_rules_modern"]
     assert r["len_second"] == 7
     assert r["rule_tone_modern"] and r["rule_no_repeat"]
@@ -152,7 +152,7 @@ def test_answer_with_no_hanzi_counts_as_empty():
 
 def test_plain_copy_of_the_given_line_cannot_pass_all_rules():
     # Given a second line that happens to end 仄, a copy would otherwise pass as a first line.
-    given = "一夜床铺统统去"
+    given = "数日街头缓缓去"
     r = run(given, given, REVERSE)
     assert r["echo"]
     assert r["rule_length"] and r["rule_tone_modern"] and r["rule_no_repeat"]
@@ -160,7 +160,7 @@ def test_plain_copy_of_the_given_line_cannot_pass_all_rules():
 
 
 def test_repeated_character_fails_rule_3_and_is_reported():
-    r = run("十年门一夜上锁", "一桌牌四人连庄", FORWARD)
+    r = run("半扇门一更上锁", "一席棋两客连庄", FORWARD)
     assert not r["rule_no_repeat"] and r["repeated"] == "一"
     assert r["rule_length"] and r["rule_tone_modern"]
     assert not r["all_rules_modern"]
@@ -183,7 +183,7 @@ def test_reference_is_scored_once_per_direction():
 
 
 def test_reference_that_breaks_a_rule_is_reported_as_breaking_it():
-    r = check_reference("十年门一夜上锁", "一桌牌四人连庄", pingshui=PS, tagger=fake_tagger)
+    r = check_reference("半扇门一更上锁", "一席棋两客连庄", pingshui=PS, tagger=fake_tagger)
     assert not r[FORWARD]["all_rules_modern"] and not r[REVERSE]["all_rules_modern"]
     assert r[FORWARD]["rule_tone_modern"] and r[REVERSE]["rule_tone_modern"]
 
@@ -231,7 +231,7 @@ def test_reference_match_exact():
 
 
 def test_reference_match_partial():
-    m = reference_match("一夜床铺统统睡", SECOND)
+    m = reference_match("数日街头缓缓睡", SECOND)
     assert not m["exact"]
     assert m["same_position_share"] == pytest.approx(6 / 7)
     assert 0 < m["char_jaccard"] < 1
@@ -243,5 +243,5 @@ def test_reference_match_ignores_punctuation_and_handles_empty():
 
 
 def test_reference_match_different_lengths():
-    m = reference_match("一夜床铺", SECOND)
+    m = reference_match("数日街头", SECOND)
     assert not m["exact"] and m["same_position_share"] == pytest.approx(4 / 7)
