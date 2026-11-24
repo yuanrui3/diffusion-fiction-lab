@@ -473,3 +473,24 @@ Written before any test item has been generated on.
 **Not claimed.** Nothing about literary quality from the automatic scores; that is what the 51 graded lines are for. Nothing about diffusion models in general from two 7–8B models.
 
 **Human grading (51 lines).** From the unseen set, with-summary condition. 17 cells (chapter, direction) drawn with seed 20261119: 9 forward and 8 reverse, no chapter twice. For each cell one line per model, drawn at random from that model's samples that pass all rules; if none passes, from all its non-empty samples, and the key records which. Shuffled; the sheet shows the summary and the couplet with the generated line marked, never the model. The grade therefore answers: "when a model does produce a line that keeps the rules, how good is it?" How often it produces one is the automatic pass rate. `scripts/make_grading_sheet.py` builds the sheet; `scripts/unblind.py` refuses to read the key until `grades.json` exists.
+
+## 2026-11-22
+
+### 33. Full run finished, scored, grading sheet built (checkpoint 3)
+
+**Run.** `run_plan.py full` finished at about 00:38 after 371 minutes, exit 0. 20 run files, 1,428 records per arm, 7,140 records, 47,124 samples (8 per record; 1 for LLaDA 0). No errors, no duplicate records, no missing items. GPU time per arm: Qwen 20 min, Dream 0.5 101 min, LLaDA 0.7 120 min, Dream 0.2 101 min, LLaDA 0 23 min; peak memory 14.0 GiB.
+
+**After the run, in this order.** The header rewrite of entry 32 was applied to all 20 files in `runs/full/` (no machine path left in `runs/` or `results/`). `freeze.py` then verified all 28 frozen files unchanged. Scored with relevance into `results/full_scored.jsonl` (47,124 rows); tables in `results/full_report.md`. No metric, set or setting was changed after the results were seen.
+
+**Grading sheet.** `results/grading/grading_sheet.html`, built by the frozen script with the frozen seed: 51 entries from 17 cells of the unseen set, with-summary condition. 25 of the 51 entries came from the fallback of entry 28: in that cell the model had no sample among its 8 that kept all rules. Which models those are is in the key, which has not been opened. So about half the grades will say how good a model's ordinary line is, not its best rule-keeping one; the key records which is which.
+
+**First reading, written before grading** (the full readout goes into `results.md` after the author has graded):
+
+1. *Almost nothing is memorized.* On the recall set, bare, the original line is reproduced exactly by Qwen in 3% of forward samples and 0% of reverse ones, and by every diffusion arm in 0% of both. The recall set is therefore "famous couplets the models have probably seen", not "couplets they can recite". The unseen−recall gap must be read as new against familiar, not new against memorized. Question 2 of entry 28 (does diffusion do relatively better at recalling the earlier line, as in the LLaDA paper's poem test) cannot be answered here, because no arm recalls either line.
+2. *The ceiling is low on the recall set.* The original classical couplets keep the modern end-tone rule only 60% of the time read forward and 46% read in reverse (table 4), so all-rules rates on the recall set cannot be compared with the unseen set's 91–93% ceiling as if the rules meant the same thing for both.
+3. *Direction, not set, separates LLaDA from Qwen.* LLaDA 0.7 minus Qwen, all rules, forward: −18*, −18*, −8, −15* (unseen with summary, unseen bare, recall with summary, recall bare); reverse: +9, +13*, +9, +3*. The end-tone rule drives it: in reverse, Qwen ends the first line in 仄 only 20–35% of the time. This holds in both sets and both conditions, which entry 28 counts as stronger evidence than any single cell.
+4. *Dream's result is a format failure.* Its length pass rate is 5–34% in every cell, as in the pilot; most of its replies are not a single line of the right length.
+
+Not committed yet: the author is asked first (`CLAUDE.md`).
+
+On 2026-11-23 the author answered "Yes, commit and push". Committed: `runs/full/`, `results/full_scored.jsonl`, `results/full_report.md`, the grading sheet and this entry. The key stays out of git (`.gitignore`) until grading is done.

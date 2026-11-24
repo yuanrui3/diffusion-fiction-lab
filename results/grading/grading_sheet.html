@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回目 grading sheet</title>
+<style>
+  :root { --bg:#faf8f4; --card:#ffffff; --ink:#1f1d1a; --muted:#6b665e; --line:#e3ded4; --accent:#8a3b12; --mark:#fff3d6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#181715; --card:#22201d; --ink:#ece8e1; --muted:#a39d92; --line:#3a3631; --accent:#e0a070; --mark:#4a3a18; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 "Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif; }
+  header, main { max-width: 760px; margin: 0 auto; padding: 16px; }
+  h1 { font: 600 20px/1.3 system-ui, sans-serif; margin: 8px 0; }
+  p.note, .ui { font: 14px/1.5 system-ui, sans-serif; color: var(--muted); }
+  .bar { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 16px; z-index: 2; }
+  .bar div { max-width: 760px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  button { font: 14px system-ui, sans-serif; padding: 6px 12px; border: 1px solid var(--accent); background: transparent; color: var(--accent); border-radius: 6px; cursor: pointer; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 16px 0; }
+  .card.done { border-color: var(--accent); }
+  .num { font: 600 13px system-ui, sans-serif; color: var(--muted); }
+  .summary { color: var(--muted); font-size: 15px; margin: 6px 0 12px; }
+  .couplet { font-size: 22px; letter-spacing: 0.12em; margin: 4px 0; }
+  .couplet .tag { font: 12px system-ui, sans-serif; letter-spacing: 0; color: var(--muted); margin-right: 8px; }
+  .couplet.judged span.line { background: var(--mark); padding: 0 4px; border-radius: 4px; }
+  .scores { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 8px; }
+  .scores label { font: 14px system-ui, sans-serif; border: 1px solid var(--line); border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+  .scores input { display: none; }
+  .scores input:checked + span { font-weight: 700; color: var(--accent); }
+  .scores label:has(input:checked) { border-color: var(--accent); }
+  textarea { width: 100%; min-height: 44px; font: 15px/1.5 inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; }
+</style>
+</head>
+<body>
+<div class="bar"><div>
+  <span class="ui" id="progress"></span>
+  <button id="export">Export grades.json</button>
+</div></div>
+<header>
+  <h1>回目 grading sheet</h1>
+  <p class="note">51 lines to grade. Each card shows the chapter summary and a couplet. One line is the original and was given to the model; the highlighted line was written by a model. Score the highlighted line for literary quality, 1 to 5, as a line of this couplet. Which model wrote it is hidden, and the order is shuffled.</p>
+  <p class="note">Suggested anchors: 1 broken or meaningless · 2 reads, but flat or off the chapter · 3 acceptable · 4 good · 5 could stand as the chapter's 回目. Comments are optional. Your marks are saved in this browser as you go; press Export when done and put <code>grades.json</code> in <code>results/grading/</code>.</p>
+</header>
+<main id="cards"></main>
+<script>
+const ENTRIES = [{"entry": "e01", "summary": "新规定出来，动作记录要本人按指印同意才能转让，何蔓和王鹏上楼找老板钟姐谈条件。钟姐请炒了三天菜的老蒲也按一个，他的指印中间一块空白，指纹早就烫没了，钱也不要。收工时后屋的人挨个去按，何蔓把拇指上剩的红印泥抹在了王鹏的卫衣袖子上。", "first": "老蒲拇指缺纹路", "second": "卫衣袖子有红迹", "judged": "second"}, {"entry": "e02", "summary": "琳跟梅姐进冷库取鱼，说领养姐姐那个孩子的申请初六就交，身世不能瞒。借凯的身子到场的母亲讲了外婆嫁给姑妈的儿子、头胎早夭的旧事，姐妹俩说定等孩子满十八岁再讲。成都那边，何蔓头一回给王鹏发私信，约他一点十分到水房补考。", "first": "冷库中姊妹立誓", "second": "水房里凤侣传情", "judged": "second"}, {"entry": "e03", "summary": "乐子在常熟为钱维岳守灵，凭老人按过手印的字条，没让本地钱家的人把他葬在虞山，又对着遗像说了一段杭州话。郫都二嬢的寿宴快散时，孩子们下地掐菜，孙女苗苗摘下定位手环搁在灶台上，独自往水渠那边去，等孩子们回来，大人一数，少了她。", "first": "乐子灵前讲乡话", "second": "Dave子 lost", "judged": "second"}, {"entry": "e04", "summary": "铁子在蒲记后厨向老蒲说了自己的案底：二十三岁那年父亲讨工钱挨打，他抡铁锹伤了人，被判一年半，老蒲给他做了碗腰花面。冉峥在科琳定的条款单上自己加了一句，说电话响了他要接，科琳签了字；不久莉迪娅来电，问能不能把他的号码留给医院。", "first": "铁子言中带刀口", "second": "冉峥单上添新条", "judged": "first"}, {"entry": "e05", "summary": "露丝请了夜班的假，陪以斯拉乘无人驾驶的车赶了十一个小时，到莱克伍德参加他外甥女的婚礼，路上她哼第二声部，他跟着唱起主旋律。成都这边，初八清晨蒲嬢嬢把老蒲白衬衫上掉了半年的扣子缝好，让他穿上，两人准备赶早去民政局办离婚。", "first": "蒲嬢嬢五点缝衣扣", "second": "露丝十小时唱歌", "judged": "second"}, {"entry": "e06", "summary": "张一帆在天府二楼的玻璃墙外，看见给孩子编辫子的男人挂着父亲张磊的名牌，身边还有个喊爸爸的小男孩；他问了下班时间，没等到就走了。晚上钟姐躺在三楼操控一副年轻身体跳萨尔萨，汪蓉守在旁边，钟姐心跳停了四秒，警报响起才醒来。", "first": "张帆看辫子忆先贤", "second": "钟姐借身子跳拉丁", "judged": "first"}, {"entry": "e07", "summary": "备菜时梅姐发现琳填好了亲属申请表，两人关进冷库争执：梅姐说这回不能再迁就妹妹，只求孩子永远别知道生母是谁，琳不答应，说过了年就交表。夜里梅姐背对着丈夫文睡不着，文说他收垃圾时常见人把扔掉的东西又捡回去，把手搁在她腰上，她没有躲开。", "first": "库内姐妹相争执", "second": "床头夫妻不转身", "judged": "first"}, {"entry": "e08", "summary": "冉峥晚上去了萨凡纳家，事事听她吩咐，两人上了床，萨凡纳便说他这个人该怎么用是她写出来的。冉峥在车里把经过逐句报给科琳，科琳听到这句头一回打断了他，那行规矩其实是她两年前写给他的；回家后她取出锁了两年的那份约定，上面没有西奥。", "first": "条款单漏写西奥", "second": "约定单漏写西奥", "judged": "second"}, {"entry": "e09", "summary": "露丝请了夜班的假，陪以斯拉乘无人驾驶的车赶了十一个小时，到莱克伍德参加他外甥女的婚礼，路上她哼第二声部，他跟着唱起主旋律。成都这边，初八清晨蒲嬢嬢把老蒲白衬衫上掉了半年的扣子缝好，让他穿上，两人准备赶早去民政局办离婚。", "first": "蒲嬢嬢五点缝衣扣", "second": "以斯拉一路唱主音", "judged": "second"}, {"entry": "e10", "summary": "铁子陪老蒲到天府四楼，看机械臂用老蒲的手法做火爆腰花，起锅提前了三百毫秒，老蒲一吃就说没熟，上七楼找了工程师。夜里对方回话：数据是跨洋采集的，带着补偿延迟的提前量，明天校准。老蒲没有回话，点着火端起了空锅。", "first": "老者端锅知延迟", "second": "老汉尝肉辨夹生", "judged": "first"}, {"entry": "e11", "summary": "梅姐半夜安排年夜饭的座位，文下楼把伊内丝的位子从厨房玻璃边挪到了最里头那桌。成都这边，王鹏在工作群发男人等级图，被何蔓驳了一大段，两人在饮水机旁斗嘴，她给他判了不及格，却没拒绝他补考。乐子当晚没去邓晓燕家，睡在后屋的躺椅上。", "first": "梅姐灯下排座次", "second": "王鹏群里争高低", "judged": "second"}, {"entry": "e12", "summary": "冉峥晚上去了萨凡纳家，事事听她吩咐，两人上了床，萨凡纳便说他这个人该怎么用是她写出来的。冉峥在车里把经过逐句报给科琳，科琳听到这句头一回打断了他，那行规矩其实是她两年前写给他的；回家后她取出锁了两年的那份约定，上面没有西奥。", "first": "条款单漏写西奥", "second": "约定中缺失科琳", "judged": "second"}, {"entry": "e13", "summary": "冉峥晚上去了萨凡纳家，事事听她吩咐，两人上了床，萨凡纳便说他这个人该怎么用是她写出来的。冉峥在车里把经过逐句报给科琳，科琳听到这句头一回打断了他，那行规矩其实是她两年前写给他的；回家后她取出锁了两年的那份约定，上面没有西奥。", "first": "条款单漏写西奥", "second": "规矩原出自科琳", "judged": "second"}, {"entry": "e14", "summary": "乐子在华西医院门外的台阶上等到邓晓燕送来两人的检测结果，都是阴性；他说初五也要走，先去徐州，她让他走时把钥匙留在鞋柜上，他攥着钥匙坐到四点。当晚后屋收完躺椅，钟姐头一回上桌打麻将，输了三十二块，当场数出纸币付清。", "first": "钟姐现钱输麻将", "second": "乐子等结果坐钥匙", "judged": "second"}, {"entry": "e15", "summary": "乐子在华西医院门外的台阶上等到邓晓燕送来两人的检测结果，都是阴性；他说初五也要走，先去徐州，她让他走时把钥匙留在鞋柜上，他攥着钥匙坐到四点。当晚后屋收完躺椅，钟姐头一回上桌打麻将，输了三十二块，当场数出纸币付清。", "first": "钟姐现钱输麻将", "second": "邓生离别赠钥匙", "judged": "second"}, {"entry": "e16", "summary": "梅姐在老车站同出租身子的西奥、值守达米安签好除夕的合同，量出走廊加的两桌会挡住半扇安全出口，还是照卖，当晚被一个开火锅店的重庆人包下。她独自验孕，发现怀上了，把验孕棒塞进厨房垃圾桶最底下，丈夫文分拣垃圾时把它找了出来。", "first": "文从垃圾找生门", "second": "梅把廊桌堵生门", "judged": "first"}, {"entry": "e17", "summary": "冉峥和阿米什姑娘莉迪娅在煎饼屋吃了顿饭，骑车送她回农场路口，在老橡树下她摸了摸他的下巴，两人吻别。同一晚，科琳借口剂量单有错把西奥约到药房后屋，让他那双发抖的手碰她，两人发生了关系；西奥回家后对妻子伊内丝只说是去改单子。", "first": "药柜后头落小雨", "second": "农场路口吻别情", "judged": "second"}, {"entry": "e18", "summary": "张一帆在天府二楼的玻璃墙外，看见给孩子编辫子的男人挂着父亲张磊的名牌，身边还有个喊爸爸的小男孩；他问了下班时间，没等到就走了。晚上钟姐躺在三楼操控一副年轻身体跳萨尔萨，汪蓉守在旁边，钟姐心跳停了四秒，警报响起才醒来。", "first": "张一帆见人走", "second": "钟姐借身子跳拉丁", "judged": "first"}, {"entry": "e19", "summary": "新规定出来，动作记录要本人按指印同意才能转让，何蔓和王鹏上楼找老板钟姐谈条件。钟姐请炒了三天菜的老蒲也按一个，他的指印中间一块空白，指纹早就烫没了，钱也不要。收工时后屋的人挨个去按，何蔓把拇指上剩的红印泥抹在了王鹏的卫衣袖子上。", "first": "老蒲拇指缺纹路", "second": "何蔓衣袖抹红泥", "judged": "second"}, {"entry": "e20", "summary": "乐子在常熟为钱维岳守灵，凭老人按过手印的字条，没让本地钱家的人把他葬在虞山，又对着遗像说了一段杭州话。郫都二嬢的寿宴快散时，孩子们下地掐菜，孙女苗苗摘下定位手环搁在灶台上，独自往水渠那边去，等孩子们回来，大人一数，少了她。", "first": "乐子灵前讲乡话", "second": "郫都二嬢寿后失孙女", "judged": "second"}, {"entry": "e21", "summary": "冉峥和阿米什姑娘莉迪娅在煎饼屋吃了顿饭，骑车送她回农场路口，在老橡树下她摸了摸他的下巴，两人吻别。同一晚，科琳借口剂量单有错把西奥约到药房后屋，让他那双发抖的手碰她，两人发生了关系；西奥回家后对妻子伊内丝只说是去改单子。", "first": "药柜后头落小雨", "second": "橡树下前落花", "judged": "second"}, {"entry": "e22", "summary": "铁子在蒲记后厨向老蒲说了自己的案底：二十三岁那年父亲讨工钱挨打，他抡铁锹伤了人，被判一年半，老蒲给他做了碗腰花面。冉峥在科琳定的条款单上自己加了一句，说电话响了他要接，科琳签了字；不久莉迪娅来电，问能不能把他的号码留给医院。", "first": "铁子面里故事", "second": "冉峥单上添新条", "judged": "first"}, {"entry": "e23", "summary": "梅姐半夜安排年夜饭的座位，文下楼把伊内丝的位子从厨房玻璃边挪到了最里头那桌。成都这边，王鹏在工作群发男人等级图，被何蔓驳了一大段，两人在饮水机旁斗嘴，她给他判了不及格，却没拒绝他补考。乐子当晚没去邓晓燕家，睡在后屋的躺椅上。", "first": "梅姐灯下排座次", "second": "王鹏群发等级图", "judged": "second"}, {"entry": "e24", "summary": "铁子在蒲记后厨向老蒲说了自己的案底：二十三岁那年父亲讨工钱挨打，他抡铁锹伤了人，被判一年半，老蒲给他做了碗腰花面。冉峥在科琳定的条款单上自己加了一句，说电话响了他要接，科琳签了字；不久莉迪娅来电，问能不能把他的号码留给医院。", "first": "铁子案底诉往事", "second": "冉峥单上添新条", "judged": "first"}, {"entry": "e25", "summary": "线路拥挤，信号慢了两百六十毫秒，老蒲在成都遥控做火爆腰花，提前三百毫秒动手，一锅炒成。拉法叶那边，蒲青被伴侣路易斯带进紧挨灶台的干货房亲热，怕父亲听见，咬住手腕不出声；路易斯说，孩子就用蒲青的精子生。", "first": "蒲青隔墙咬手腕", "second": "拉法厨房传笑声", "judged": "second"}, {"entry": "e26", "summary": "张一帆在天府二楼的玻璃墙外，看见给孩子编辫子的男人挂着父亲张磊的名牌，身边还有个喊爸爸的小男孩；他问了下班时间，没等到就走了。晚上钟姐躺在三楼操控一副年轻身体跳萨尔萨，汪蓉守在旁边，钟姐心跳停了四秒，警报响起才醒来。", "first": "张父看孩子编辫子", "second": "钟姐借身子跳拉丁", "judged": "first"}, {"entry": "e27", "summary": "铁子头一回进蒲记后厨，系上围裙跟老蒲学切腰花，切断了好几个，傍晚又帮着端菜。王鹏躺在自己床上接了近邻护理平台派的第一单，远程开着机器人帮独居的老邓冲澡，又留下陪他聊了四十分钟，平台没有扣钱。", "first": "王鹏远程为老邓洗洗", "second": "铁子拜师替老蒲打荷", "judged": "first"}, {"entry": "e28", "summary": "改名优素福的外卖员迦勒给拉法叶的清真寺送饭，摘下耳机，脱了鞋走进寺里，摆完饭没有走，靠墙坐了下来。路易斯拿回结婚登记申请表，在厨房里单腿跪下向蒲青求婚；两人亲热过后蒲青答应了，约定第二天一早去县政府登记。", "first": "迦勒送饭入寺门", "second": "路易斯单膝跪厨房", "judged": "first"}, {"entry": "e29", "summary": "露丝请了夜班的假，陪以斯拉乘无人驾驶的车赶了十一个小时，到莱克伍德参加他外甥女的婚礼，路上她哼第二声部，他跟着唱起主旋律。成都这边，初八清晨蒲嬢嬢把老蒲白衬衫上掉了半年的扣子缝好，让他穿上，两人准备赶早去民政局办离婚。", "first": "蒲嬢嬢五点缝衣扣", "second": "露丝十小时唱和应", "judged": "second"}, {"entry": "e30", "summary": "新规定出来，动作记录要本人按指印同意才能转让，何蔓和王鹏上楼找老板钟姐谈条件。钟姐请炒了三天菜的老蒲也按一个，他的指印中间一块空白，指纹早就烫没了，钱也不要。收工时后屋的人挨个去按，何蔓把拇指上剩的红印泥抹在了王鹏的卫衣袖子上。", "first": "老蒲拇指缺纹路", "second": "何蔓袖红印泥", "judged": "second"}, {"entry": "e31", "summary": "铁子陪老蒲到天府四楼，看机械臂用老蒲的手法做火爆腰花，起锅提前了三百毫秒，老蒲一吃就说没熟，上七楼找了工程师。夜里对方回话：数据是跨洋采集的，带着补偿延迟的提前量，明天校准。老蒲没有回话，点着火端起了空锅。", "first": "铁汉观技识滞后", "second": "老汉尝肉辨夹生", "judged": "first"}, {"entry": "e32", "summary": "梅姐半夜安排年夜饭的座位，文下楼把伊内丝的位子从厨房玻璃边挪到了最里头那桌。成都这边，王鹏在工作群发男人等级图，被何蔓驳了一大段，两人在饮水机旁斗嘴，她给他判了不及格，却没拒绝他补考。乐子当晚没去邓晓燕家，睡在后屋的躺椅上。", "first": "梅姐灯下排座次", "second": "王鹏群里论等级", "judged": "second"}, {"entry": "e33", "summary": "乐子在常熟为钱维岳守灵，凭老人按过手印的字条，没让本地钱家的人把他葬在虞山，又对着遗像说了一段杭州话。郫都二嬢的寿宴快散时，孩子们下地掐菜，孙女苗苗摘下定位手环搁在灶台上，独自往水渠那边去，等孩子们回来，大人一数，少了她。", "first": "乐子灵前讲乡话", "second": "二娃田头失孙花", "judged": "second"}, {"entry": "e34", "summary": "备菜时梅姐发现琳填好了亲属申请表，两人关进冷库争执：梅姐说这回不能再迁就妹妹，只求孩子永远别知道生母是谁，琳不答应，说过了年就交表。夜里梅姐背对着丈夫文睡不着，文说他收垃圾时常见人把扔掉的东西又捡回去，把手搁在她腰上，她没有躲开。", "first": "床头夫妻不 sleep", "second": "床头夫妻不转身", "judged": "first"}, {"entry": "e35", "summary": "冉峥和阿米什姑娘莉迪娅在煎饼屋吃了顿饭，骑车送她回农场路口，在老橡树下她摸了摸他的下巴，两人吻别。同一晚，科琳借口剂量单有错把西奥约到药房后屋，让他那双发抖的手碰她，两人发生了关系；西奥回家后对妻子伊内丝只说是去改单子。", "first": "药柜后头落小雨", "second": "橡树之下吻别离", "judged": "second"}, {"entry": "e36", "summary": "线路拥挤，信号慢了两百六十毫秒，老蒲在成都遥控做火爆腰花，提前三百毫秒动手，一锅炒成。拉法叶那边，蒲青被伴侣路易斯带进紧挨灶台的干货房亲热，怕父亲听见，咬住手腕不出声；路易斯说，孩子就用蒲青的精子生。", "first": "蒲青隔墙咬手腕", "second": "路易斯用perm生孩子", "judged": "second"}, {"entry": "e37", "summary": "厨子老蒲在成都茶铺后屋戴上眼镜，借西奥的身子在拉法叶试炒腰花，那边的声音传来总慢一点，头一锅炒老了；第二锅铁子在旁边替他倒数，才炒对。药剂师科琳扶着西奥发抖的手签了减药方案，事后给自己把脉，发觉脉搏比平时快。", "first": "秒倒数老浦", "second": "两百毫秒铁子数锅", "judged": "first"}, {"entry": "e38", "summary": "乐子在华西医院门外的台阶上等到邓晓燕送来两人的检测结果，都是阴性；他说初五也要走，先去徐州，她让他走时把钥匙留在鞋柜上，他攥着钥匙坐到四点。当晚后屋收完躺椅，钟姐头一回上桌打麻将，输了三十二块，当场数出纸币付清。", "first": "钟姐现钱输麻将", "second": "乐子攥钥匙等结果", "judged": "second"}, {"entry": "e39", "summary": "梅姐在老车站同出租身子的西奥、值守达米安签好除夕的合同，量出走廊加的两桌会挡住半扇安全出口，还是照卖，当晚被一个开火锅店的重庆人包下。她独自验孕，发现怀上了，把验孕棒塞进厨房垃圾桶最底下，丈夫文分拣垃圾时把它找了出来。", "first": "文到厨下验孕棒", "second": "梅把廊桌堵生门", "judged": "first"}, {"entry": "e40", "summary": "线路拥挤，信号慢了两百六十毫秒，老蒲在成都遥控做火爆腰花，提前三百毫秒动手，一锅炒成。拉法叶那边，蒲青被伴侣路易斯带进紧挨灶台的干货房亲热，怕父亲听见，咬住手腕不出声；路易斯说，孩子就用蒲青的精子生。", "first": "蒲青隔墙咬手腕", "second": "路易斯近灶赠精子", "judged": "second"}, {"entry": "e41", "summary": "备菜时梅姐发现琳填好了亲属申请表，两人关进冷库争执：梅姐说这回不能再迁就妹妹，只求孩子永远别知道生母是谁，琳不答应，说过了年就交表。夜里梅姐背对着丈夫文睡不着，文说他收垃圾时常见人把扔掉的东西又捡回去，把手搁在她腰上，她没有躲开。", "first": "冷库姐妹争亲属", "second": "床头夫妻不转身", "judged": "first"}, {"entry": "e42", "summary": "琳跟梅姐进冷库取鱼，说领养姐姐那个孩子的申请初六就交，身世不能瞒。借凯的身子到场的母亲讲了外婆嫁给姑妈的儿子、头胎早夭的旧事，姐妹俩说定等孩子满十八岁再讲。成都那边，何蔓头一回给王鹏发私信，约他一点十分到水房补考。", "first": "冷库中姊妹立誓", "second": "私信里朋友相约", "judged": "second"}, {"entry": "e43", "summary": "厨子老蒲在成都茶铺后屋戴上眼镜，借西奥的身子在拉法叶试炒腰花，那边的声音传来总慢一点，头一锅炒老了；第二锅铁子在旁边替他倒数，才炒对。药剂师科琳扶着西奥发抖的手签了减药方案，事后给自己把脉，发觉脉搏比平时快。", "first": "两百毫秒老蒲试炒", "second": "两百毫秒铁子数锅", "judged": "first"}, {"entry": "e44", "summary": "厨子老蒲在成都茶铺后屋戴上眼镜，借西奥的身子在拉法叶试炒腰花，那边的声音传来总慢一点，头一锅炒老了；第二锅铁子在旁边替他倒数，才炒对。药剂师科琳扶着西奥发抖的手签了减药方案，事后给自己把脉，发觉脉搏比平时快。", "first": "八分时辰蒲翁戴镜", "second": "两百毫秒铁子数锅", "judged": "first"}, {"entry": "e45", "summary": "琳跟梅姐进冷库取鱼，说领养姐姐那个孩子的申请初六就交，身世不能瞒。借凯的身子到场的母亲讲了外婆嫁给姑妈的儿子、头胎早夭的旧事，姐妹俩说定等孩子满十八岁再讲。成都那边，何蔓头一回给王鹏发私信，约他一点十分到水房补考。", "first": "冷库中姊妹立誓", "second": "水房中情侣定约", "judged": "second"}, {"entry": "e46", "summary": "改名优素福的外卖员迦勒给拉法叶的清真寺送饭，摘下耳机，脱了鞋走进寺里，摆完饭没有走，靠墙坐了下来。路易斯拿回结婚登记申请表，在厨房里单腿跪下向蒲青求婚；两人亲热过后蒲青答应了，约定第二天一早去县政府登记。", "first": "superior 装饭，拉法叶寺墙坐", "second": "路易斯单膝跪厨房", "judged": "first"}, {"entry": "e47", "summary": "铁子头一回进蒲记后厨，系上围裙跟老蒲学切腰花，切断了好几个，傍晚又帮着端菜。王鹏躺在自己床上接了近邻护理平台派的第一单，远程开着机器人帮独居的老邓冲澡，又留下陪他聊了四十分钟，平台没有扣钱。", "first": "王鹏远程陪老邓聊天", "second": "铁子拜师替老蒲打荷", "judged": "first"}, {"entry": "e48", "summary": "改名优素福的外卖员迦勒给拉法叶的清真寺送饭，摘下耳机，脱了鞋走进寺里，摆完饭没有走，靠墙坐了下来。路易斯拿回结婚登记申请表，在厨房里单腿跪下向蒲青求婚；两人亲热过后蒲青答应了，约定第二天一早去县政府登记。", "first": "迦勒静坐寺墙根", "second": "路易斯单膝跪厨房", "judged": "first"}, {"entry": "e49", "summary": "铁子头一回进蒲记后厨，系上围裙跟老蒲学切腰花，切断了好几个，傍晚又帮着端菜。王鹏躺在自己床上接了近邻护理平台派的第一单，远程开着机器人帮独居的老邓冲澡，又留下陪他聊了四十分钟，平台没有扣钱。", "first": "铁子初来学腰花切断", "second": "铁子拜师替老蒲打荷", "judged": "first"}, {"entry": "e50", "summary": "梅姐在老车站同出租身子的西奥、值守达米安签好除夕的合同，量出走廊加的两桌会挡住半扇安全出口，还是照卖，当晚被一个开火锅店的重庆人包下。她独自验孕，发现怀上了，把验孕棒塞进厨房垃圾桶最底下，丈夫文分拣垃圾时把它找了出来。", "first": "梅将筵席挡出路", "second": "梅把廊桌堵生门", "judged": "first"}, {"entry": "e51", "summary": "铁子陪老蒲到天府四楼，看机械臂用老蒲的手法做火爆腰花，起锅提前了三百毫秒，老蒲一吃就说没熟，上七楼找了工程师。夜里对方回话：数据是跨洋采集的，带着补偿延迟的提前量，明天校准。老蒲没有回话，点着火端起了空锅。", "first": "铁子看工程师", "second": "老汉尝肉辨夹生", "judged": "first"}];
+const KEY = "huimu-grades-unseen-20261119";
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+function store() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} update(); }
+function update() {
+  const done = ENTRIES.filter(e => saved[e.entry] && saved[e.entry].score).length;
+  document.getElementById("progress").textContent = done + " of " + ENTRIES.length + " graded";
+  ENTRIES.forEach(e => document.getElementById("card-" + e.entry).classList.toggle("done", !!(saved[e.entry] && saved[e.entry].score)));
+}
+const main = document.getElementById("cards");
+ENTRIES.forEach((e, i) => {
+  const card = document.createElement("div");
+  card.className = "card"; card.id = "card-" + e.entry;
+  const row = (tag, text, judged) => '<div class="couplet' + (judged ? ' judged' : '') + '"><span class="tag">' + tag + (judged ? ' · to grade' : ' · given') + '</span><span class="line">' + text + '</span></div>';
+  let scores = "";
+  for (let s = 1; s <= 5; s++) scores += '<label><input type="radio" name="s-' + e.entry + '" value="' + s + '"><span>' + s + '</span></label>';
+  card.innerHTML = '<div class="num">' + (i + 1) + ' / ' + ENTRIES.length + '</div>' +
+    '<div class="summary">' + e.summary + '</div>' +
+    row("上句", e.first, e.judged === "first") + row("下句", e.second, e.judged === "second") +
+    '<div class="scores">' + scores + '</div>' +
+    '<textarea placeholder="comment (optional)"></textarea>';
+  main.appendChild(card);
+  const prev = saved[e.entry] || {};
+  card.querySelectorAll("input").forEach(inp => {
+    if (String(prev.score) === inp.value) inp.checked = true;
+    inp.addEventListener("change", () => { saved[e.entry] = Object.assign(saved[e.entry] || {}, {score: Number(inp.value)}); store(); });
+  });
+  const ta = card.querySelector("textarea");
+  ta.value = prev.comment || "";
+  ta.addEventListener("input", () => { saved[e.entry] = Object.assign(saved[e.entry] || {}, {comment: ta.value}); store(); });
+});
+update();
+document.getElementById("export").addEventListener("click", () => {
+  const out = {sheet: "unseen-20261119", exported: new Date().toISOString(),
+               grades: ENTRIES.map(e => ({entry: e.entry, score: (saved[e.entry] || {}).score || null, comment: (saved[e.entry] || {}).comment || ""}))};
+  const blob = new Blob([JSON.stringify(out, null, 1)], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "grades.json"; a.click();
+});
+</script>
+</body>
+</html>
