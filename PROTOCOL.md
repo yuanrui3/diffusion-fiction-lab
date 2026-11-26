@@ -494,3 +494,33 @@ Written before any test item has been generated on.
 Not committed yet: the author is asked first (`CLAUDE.md`).
 
 On 2026-11-23 the author answered "Yes, commit and push". Committed: `runs/full/`, `results/full_scored.jsonl`, `results/full_report.md`, the grading sheet and this entry. The key stays out of git (`.gitignore`) until grading is done.
+
+## 2026-11-25
+
+### 34. Grading done, grades unblinded, results written
+
+**Grades.** The author graded the sheet in their own browser and exported `grades.json` (sheet `unseen-20261119`). It was copied from the browser's download folder into `results/grading/`. `freeze.py` verified all frozen files, then `scripts/unblind.py` read the key for the first time. Output: `results/grading/graded.jsonl` and `results/grading/grades_report.md`.
+
+48 of the 51 lines were graded. Three were left blank: e11 (Qwen, a rule-passing line), e36 and e46 (both Dream fallbacks that mix in English words). Call made without asking: they count as missing, as `unblind.py` was written to do, and are not imputed. Scoring the two Dream lines as 1 would only widen Dream's gap.
+
+| Model | Lines graded | Mean (1–5) | Scored 4 or 5 | From rule-passing samples |
+|---|---|---|---|---|
+| Qwen | 16 | 2.88 [2.25, 3.44] | 6 | 12 |
+| Dream 0.5 | 15 | 1.60 [1.20, 2.07] | 1 | 3 |
+| LLaDA 0.7 | 17 | 2.71 [2.29, 3.12] | 3 | 10 |
+
+Paired by cell: LLaDA − Qwen −0.25 [−1.00, +0.50]; Dream − Qwen −1.43 [−2.21, −0.57]; LLaDA − Dream +1.20 [+0.67, +1.67].
+
+**One analysis not in the frozen plan**, labelled as such in `results.md`: mean grade by whether the line passed all rules. Rule-passing lines averaged 2.88 (25 lines), fallbacks 1.91 (23 lines).
+
+**Results.** `results/results.md` answers the question and lists what the numbers can and can't show. Its caveats include:
+- Claude-assisted 回目 and Claude-written summaries.
+- "Unseen" taken on the models' release dates, not verified.
+- No memorization of the classics.
+- Classical originals that don't keep the tone rule.
+- One judge, 48 grades, half of them fallbacks.
+- A fixed setup and the model sizes.
+
+**Keys.** Both grading sheets (the dry run of entry 30 and this one) are now graded, so `.gitignore` no longer excludes their keys; `graded.jsonl` carries the same mapping anyway. A future sheet's key must be listed in `.gitignore` until its grading is done.
+
+Phase 1 is complete. Phases 2 and 3 have not been started.

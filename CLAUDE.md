@@ -84,6 +84,9 @@ One model per process. Never start a second generation while one is running, and
 | Score | `scripts/score.py "runs/<plan>/*.jsonl" --relevance --out results/<plan>_scored.jsonl` | scored rows |
 | Report tables | `scripts/report.py results/<plan>_scored.jsonl --out results/<plan>_report.md` | Markdown tables |
 | Grading sheet | `scripts/make_grading_sheet.py results/full_scored.jsonl` | `results/grading/` |
+| Unblind the author's grades (needs `grades.json`) | `scripts/unblind.py` | `results/grading/graded.jsonl`, `grades_report.md` |
+
+Phase 1 finished on 2026-11-25: the answer is in `results/results.md`, the last entry in `PROTOCOL.md` is 34.
 
 The frozen settings for phase 1 live in `config/phase1.json`; `run_plan.py` reads nothing else. The parallelism score uses the LTP tagger pinned in `src/dfl/registry.py` (free for research and personal use, not for commercial use).
 

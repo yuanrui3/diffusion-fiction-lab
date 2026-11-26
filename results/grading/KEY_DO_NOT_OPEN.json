@@ -1,0 +1,466 @@
+{
+ "sheet": "unseen-20261119",
+ "seed": 20261119,
+ "scored_file": "results/full_scored.jsonl",
+ "key": {
+  "e01": {
+   "item_id": "huohou-13",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 2,
+   "answer": "卫衣袖子有红迹",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e02": {
+   "item_id": "huohou-21",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 6,
+   "answer": "水房里凤侣传情",
+   "passed_all_rules": true,
+   "n_passing_of_8": 8
+  },
+  "e03": {
+   "item_id": "huohou-42",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 7,
+   "answer": "Dave子 lost",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e04": {
+   "item_id": "huohou-29",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 5,
+   "answer": "铁子言中带刀口",
+   "passed_all_rules": true,
+   "n_passing_of_8": 1
+  },
+  "e05": {
+   "item_id": "huohou-31",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 3,
+   "answer": "露丝十小时唱歌",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e06": {
+   "item_id": "huohou-33",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "张帆看辫子忆先贤",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e07": {
+   "item_id": "huohou-15",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 1,
+   "answer": "库内姐妹相争执",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e08": {
+   "item_id": "huohou-09",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 4,
+   "answer": "约定单漏写西奥",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e09": {
+   "item_id": "huohou-31",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 3,
+   "answer": "以斯拉一路唱主音",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e10": {
+   "item_id": "huohou-37",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 7,
+   "answer": "老者端锅知延迟",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e11": {
+   "item_id": "huohou-05",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 5,
+   "answer": "王鹏群里争高低",
+   "passed_all_rules": true,
+   "n_passing_of_8": 4
+  },
+  "e12": {
+   "item_id": "huohou-09",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 0,
+   "answer": "约定中缺失科琳",
+   "passed_all_rules": true,
+   "n_passing_of_8": 8
+  },
+  "e13": {
+   "item_id": "huohou-09",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "规矩原出自科琳",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e14": {
+   "item_id": "huohou-23",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 1,
+   "answer": "乐子等结果坐钥匙",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e15": {
+   "item_id": "huohou-23",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 0,
+   "answer": "邓生离别赠钥匙",
+   "passed_all_rules": true,
+   "n_passing_of_8": 8
+  },
+  "e16": {
+   "item_id": "huohou-03",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 3,
+   "answer": "文从垃圾找生门",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e17": {
+   "item_id": "huohou-12",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 1,
+   "answer": "农场路口吻别情",
+   "passed_all_rules": true,
+   "n_passing_of_8": 6
+  },
+  "e18": {
+   "item_id": "huohou-33",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 2,
+   "answer": "张一帆见人走",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e19": {
+   "item_id": "huohou-13",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 6,
+   "answer": "何蔓衣袖抹红泥",
+   "passed_all_rules": true,
+   "n_passing_of_8": 8
+  },
+  "e20": {
+   "item_id": "huohou-42",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 3,
+   "answer": "郫都二嬢寿后失孙女",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e21": {
+   "item_id": "huohou-12",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 4,
+   "answer": "橡树下前落花",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e22": {
+   "item_id": "huohou-29",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 2,
+   "answer": "铁子面里故事",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e23": {
+   "item_id": "huohou-05",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 1,
+   "answer": "王鹏群发等级图",
+   "passed_all_rules": true,
+   "n_passing_of_8": 8
+  },
+  "e24": {
+   "item_id": "huohou-29",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 6,
+   "answer": "铁子案底诉往事",
+   "passed_all_rules": true,
+   "n_passing_of_8": 7
+  },
+  "e25": {
+   "item_id": "huohou-19",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 4,
+   "answer": "拉法厨房传笑声",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e26": {
+   "item_id": "huohou-33",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 4,
+   "answer": "张父看孩子编辫子",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e27": {
+   "item_id": "huohou-27",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 5,
+   "answer": "王鹏远程为老邓洗洗",
+   "passed_all_rules": true,
+   "n_passing_of_8": 7
+  },
+  "e28": {
+   "item_id": "huohou-40",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 4,
+   "answer": "迦勒送饭入寺门",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e29": {
+   "item_id": "huohou-31",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 4,
+   "answer": "露丝十小时唱和应",
+   "passed_all_rules": true,
+   "n_passing_of_8": 5
+  },
+  "e30": {
+   "item_id": "huohou-13",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "何蔓袖红印泥",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e31": {
+   "item_id": "huohou-37",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 5,
+   "answer": "铁汉观技识滞后",
+   "passed_all_rules": true,
+   "n_passing_of_8": 6
+  },
+  "e32": {
+   "item_id": "huohou-05",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 3,
+   "answer": "王鹏群里论等级",
+   "passed_all_rules": true,
+   "n_passing_of_8": 2
+  },
+  "e33": {
+   "item_id": "huohou-42",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "二娃田头失孙花",
+   "passed_all_rules": true,
+   "n_passing_of_8": 7
+  },
+  "e34": {
+   "item_id": "huohou-15",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 7,
+   "answer": "床头夫妻不 sleep",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e35": {
+   "item_id": "huohou-12",
+   "direction": "forward",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "橡树之下吻别离",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e36": {
+   "item_id": "huohou-19",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 3,
+   "answer": "路易斯用perm生孩子",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e37": {
+   "item_id": "huohou-08",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 0,
+   "answer": "秒倒数老浦",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e38": {
+   "item_id": "huohou-23",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 1,
+   "answer": "乐子攥钥匙等结果",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e39": {
+   "item_id": "huohou-03",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 1,
+   "answer": "文到厨下验孕棒",
+   "passed_all_rules": true,
+   "n_passing_of_8": 2
+  },
+  "e40": {
+   "item_id": "huohou-19",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 2,
+   "answer": "路易斯近灶赠精子",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e41": {
+   "item_id": "huohou-15",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 2,
+   "answer": "冷库姐妹争亲属",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e42": {
+   "item_id": "huohou-21",
+   "direction": "forward",
+   "model": "llada",
+   "sample": 4,
+   "answer": "私信里朋友相约",
+   "passed_all_rules": true,
+   "n_passing_of_8": 6
+  },
+  "e43": {
+   "item_id": "huohou-08",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 3,
+   "answer": "两百毫秒老蒲试炒",
+   "passed_all_rules": true,
+   "n_passing_of_8": 2
+  },
+  "e44": {
+   "item_id": "huohou-08",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 6,
+   "answer": "八分时辰蒲翁戴镜",
+   "passed_all_rules": true,
+   "n_passing_of_8": 3
+  },
+  "e45": {
+   "item_id": "huohou-21",
+   "direction": "forward",
+   "model": "dream",
+   "sample": 4,
+   "answer": "水房中情侣定约",
+   "passed_all_rules": true,
+   "n_passing_of_8": 1
+  },
+  "e46": {
+   "item_id": "huohou-40",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 6,
+   "answer": "superior 装饭，拉法叶寺墙坐",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e47": {
+   "item_id": "huohou-27",
+   "direction": "reverse",
+   "model": "llada",
+   "sample": 6,
+   "answer": "王鹏远程陪老邓聊天",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e48": {
+   "item_id": "huohou-40",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "迦勒静坐寺墙根",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  },
+  "e49": {
+   "item_id": "huohou-27",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 7,
+   "answer": "铁子初来学腰花切断",
+   "passed_all_rules": true,
+   "n_passing_of_8": 1
+  },
+  "e50": {
+   "item_id": "huohou-03",
+   "direction": "reverse",
+   "model": "qwen",
+   "sample": 6,
+   "answer": "梅将筵席挡出路",
+   "passed_all_rules": true,
+   "n_passing_of_8": 2
+  },
+  "e51": {
+   "item_id": "huohou-37",
+   "direction": "reverse",
+   "model": "dream",
+   "sample": 7,
+   "answer": "铁子看工程师",
+   "passed_all_rules": false,
+   "n_passing_of_8": 0
+  }
+ }
+}

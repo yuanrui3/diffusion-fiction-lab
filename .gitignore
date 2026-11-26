@@ -14,12 +14,9 @@ models/
 # raw downloads that can be rebuilt by scripts/
 data/raw/
 
-# the unblinding key for the grading sheet stays out of sight until grading is done
-results/grading/KEY_DO_NOT_OPEN.json
-
 # OS noise
 Thumbs.db
 .DS_Store
 
-# keys of grading sheets stay out of git until grading is done
-results/grading_dryrun/KEY_DO_NOT_OPEN.json
+# grading keys: both sheets are graded (2026-11-25), so the keys are no longer ignored.
+# A future sheet's key must be listed here until its grading is done.
