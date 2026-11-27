@@ -524,3 +524,100 @@ Paired by cell: LLaDA − Qwen −0.25 [−1.00, +0.50]; Dream − Qwen −1.43 
 **Keys.** Both grading sheets (the dry run of entry 30 and this one) are now graded, so `.gitignore` no longer excludes their keys; `graded.jsonl` carries the same mapping anyway. A future sheet's key must be listed in `.gitignore` until its grading is done.
 
 Phase 1 is complete. Phases 2 and 3 have not been started.
+
+### 35. Draft release v0.2.0 for Zenodo
+
+The author asked for a release, then for unattended work until 5 am without being asked to judge or decide. The repo already had a release, v0.1.0, made by the author on 2026-11-22 from a curated commit (`a6abbcd`, on no branch, tag only). That commit left out `data/unseen/` and the grading dry run, cut excerpts from both out of this log, and replaced unseen lines in the tests with made-up ones. Zenodo archives every published release (webhook present).
+
+So v0.2.0 was built the same way, not from `main`:
+- **Commit:** `7def136`, child of `a25b275`, on no branch; tag `v0.2.0` pushed.
+- **Excluded:**
+  - everything v0.1.0 left out;
+  - `runs/full/*_unseen_*`;
+  - the unseen rows of `results/full_scored.jsonl`, so the archived file has the 41,448 recall rows only;
+  - `results/grading/`: sheet, grades, unblinded lines and key.
+- **Rewritten for the archive:**
+  - `results/results.md` describes, rather than quotes, the five model lines written about unseen chapters;
+  - the scope note at the top of this log now covers v0.2.0;
+  - `.zenodo.json` is at v0.2.0 with a new description.
+- **Checks:**
+  - A scan for the 86 回目 halves, 8-character runs of the summaries, and rare 3-character runs of the 回目 found none, apart from the names list v0.1.0 also kept.
+  - All 138 tests pass in the archived tree.
+
+**Gap in v0.1.0.** Its tests still contain four unseen 回目 halves (外婆借身炸米饺, 王鹏借壳给老邓洗澡 twice, 清汤面点两碗, 嬢嬢热抱屋头那个), so the published v0.1.0 archive holds them. v0.2.0 replaces them with made-up lines. Whether to do anything about v0.1.0 on Zenodo is the author's call.
+
+The GitHub release is left as a **draft**. Publishing it creates a permanent Zenodo version, and the scope above is a reading of the author's v0.1.0 choices rather than an instruction, so the author publishes it. Nothing on `main` changed for the release.
+
+## 2026-11-26
+
+### 36. Theory exploration: post hoc analyses and probes (not part of the frozen plan)
+
+The author asked for unattended work until 5 am exploring the theoretical side of the project, using only free APIs and never asking the author to judge. Everything below is **post hoc**, chosen after the results were seen. It lives in `explore/` and reads the frozen outputs without changing them; none of it is a pre-registered result. No new couplets were generated, and nothing of phases 2 or 3 was started.
+
+**Literature.** Checked through the free arXiv API (titles, authors, dates and abstracts), so that every reference in `results/theory.md` is verified rather than recalled: any-order and masked diffusion theory, token-order planning, the reversal curse, next-token-prediction limits, counting and tokenization, and LLM tone compliance in Chinese poetry.
+
+**Analyses of existing outputs** (`explore/analyse_existing.py`, CPU, output `explore/out/existing_data.md`):
+1. *Line-final tone.* For each model and for the originals: the share of 平 endings by direction and by the given line's final tone (modern and classical). From these, a *rule effect* (direction contrast at fixed given tone) and an *imitation effect* (given-tone contrast at fixed direction). Only the recall set separates the two, because in 《火候》 direction and given tone always agree.
+2. *What the originals keep.* Tone assignment (first line 仄, second 平) against opposition (the two lines end on different tones), novel by novel.
+3. *Length.* Signed length error, the calibration runs' output length against canvas slack, and a confusion table of required against produced length (attraction toward 7 characters).
+4. *Order.* From `commit_step` in `runs/full/`: whether the end padding is fixed before the line, the left-to-right correlation within the line, and when the last character is fixed.
+5. *Copying.* The share of the answer's characters found in the summary and in the given line, and its correlation with the relevance score.
+
+**Shuffled baseline for parallelism** (`explore/parallel_baseline.py`, LTP on the CPU): the frozen parallelism score of right-length answers, against the line actually given and against another item's given line of the same length and role. The first run passed raw answers instead of 汉字-only strings (the checker strips non-汉字 first), so Dream's answers with stray letters were dropped. It was corrected and rerun before any table was used.
+
+**Probes** (GPU, one model per process, one forward pass per input, nothing sampled):
+- `explore/probe_tones.py`:
+  - *Probe K*, tone knowledge: “汉字“X”在普通话里读第几声？只回答一个数字。” for the 554 line-final characters with one unambiguous reading. The reply's first position is read over the digits 1–4.
+  - *Probe S*, the final slot: the exact phase 1 prompt, followed by the original line minus its last character. The slot's mass on 平 is read among single-汉字 tokens, with the prompt as used and with rule 三 (the end tone) removed. Both directions, all 723 items.
+- `explore/probe_length.py`, *Probe L*: on the fully masked phase 1 canvas, each position's probability of an end token, its entropy and its top probability. These give the length the model expects before the first step, and which position each sampler would fix first.
+
+**Follow-up probes**, added after the first probe results raised questions:
+- `probe_checks.py`, *K2*: Qwen put only 1% of its first-token mass on bare digits in probe K, so the tone question was asked again with the reply started as "第", reading digits and numerals together (78–86% of the mass lands there). It also runs a sanity check of the final-slot canvas on well-known couplets.
+- `probe_S_masked_tail.py`: probe S with the tail masked rather than padded. That is the state Dream is actually in when it picks its last character.
+- `probe_dream_order.py`: Dream's own entropy ranking at step 0, recomputed with its sampler's temperature, top-p and bf16 arithmetic, plus a check of its one-position shift.
+- `rescore_opposition.py`: phase 1's all-rules rate with tone opposition in place of tone assignment, and the author's grades against copying from the summary.
+- `relevance_vs_copy.py` (CPU): the relevance difference against Qwen, overall and within five bands of copy share.
+- `copy_first.py` (CPU): commit rank of tokens copied from the summary against other tokens, overall and within each third of the line.
+- `probe_rule_price.py`: how committed the final character is. On each model's own first sample (and on the original line), how often its favourite final character already has the class the rule wants, and how much less likely the best allowed character is when it doesn't.
+
+**Main findings** (reading in `results/theory.md`; tables in `explore/out/`):
+- *Tone.* No model follows the tone rule: the rule effect is at most +10 points out of 100, and deleting the rule from the prompt moves the final slot by at most 1 point. All three know Mandarin tones only moderately (K2 平/仄: 67–83%). All prefer 平 endings, and on 《火候》 that preference alone produces phase 1's "LLaDA better at first lines" pattern (an exact identity: pass difference = 2b − 1).
+- *The classics' rule.* Classical 回目 keep tone opposition (86–100% by novel, classical tones) but not the assignment the checker tested (42–73%). Re-scored with opposition, the originals pass 77% on the recall set instead of 42%, while the models stay near 40%.
+- *Order and length.*
+  - LLaDA fixes its end padding first in 84–88% of samples, and on the fully masked canvas already expects the right length (−0.09 tokens on average).
+  - Dream fills almost left to right because its sampler's truncated, bf16 entropy ties many positions at zero and breaks ties leftward; at temperature 1 its own beliefs would fix the padding first.
+  - Neither beats Qwen on length. All drift toward 7-character lines.
+- *Parallelism.* On right-length lines, Qwen and LLaDA align with the given line as much as the originals do above a shuffled baseline (+0.25 to +0.27 against +0.21 to +0.30). Dream aligns less.
+- *Copying.* The diffusion models take 74–82% of their characters from the summary (Qwen 48%, originals 46%), and relevance rises with it. At equal copy share, LLaDA's relevance edge over Qwen on the unseen set halves (+0.061 → +0.036) but stays above zero; Dream's disappears. The author's grades fall with copying (ρ = −0.30 over 48 lines; within Qwen −0.64).
+- *Dream's final slot is unreadable at temperature 1:* 13% of its mass falls on single 汉字 and 1.5% on the original; it generates usable text only because it samples at 0.2–0.5.
+- *Copy first.* The adaptive samplers fix tokens copied from the summary before the line's other tokens. LLaDA 0.7: mean commit rank 0.43 against 0.68, and −0.22 within the same third of the line. Easy-first ordering builds each line around lifted characters, which helps explain the diffusion models' heavy copying.
+- *The final word needs look-ahead after all.* `theory.md` first said an autoregressive model meets the end-tone rule at its last step, the best possible position. The price probe showed that was too strong. On Qwen's own first lines the favourite final character has the wrong tone 64–71% of the time, and the best allowed one is then a median 4.3–4.4 nats (about 75 times) less likely. The line is committed to its last word before the last step. `theory.md` §2, §3.1 and prediction 3 were revised: enforcing the tone from the first step, which a canvas allows, is the one place order should matter even with one line given.
+
+Results and their reading: `results/theory.md`. Tables: `explore/out/`.
+
+### 37. Correction to `results.md` section 3 (memorization)
+
+The first version of `results/results.md` said that "no model recalls either line" of the classical 回目 and that the poem-reversal question could not be tested. Both were wrong. The frozen per-attempt exact-match rates round to 0–3%, and that hides what an item-level count shows (`explore/recall_direction.py`, post hoc):
+- Qwen reproduced the original second line for 30 of 580 items, but the original first line for only 4 (Fisher p < 0.001).
+- LLaDA 0.7 reproduced 1 and 4. The two direction profiles differ (Fisher p = 0.004).
+- Dream reproduced none.
+
+On the frozen partial-recall score (`ref_same_position`), averaged over all 580 items:
+- Qwen: 9.2% forward, 4.2% reverse.
+- LLaDA: 5.4% and 5.6%.
+- LLaDA − Qwen: −3.8 [−5.2, −2.5] forward, +1.4 [+0.6, +2.2] reverse.
+
+That is the LLaDA paper's reversal pattern, at a small scale. Section 3 of `results.md` was rewritten to say so, and the short answer and the "can show" list were adjusted, each marked with the date. The draft release v0.2.0 (entry 35) still carries the old wording. The fix reaches the archive only if it is committed and the draft rebuilt.
+
+## 2026-11-27
+
+### 38. Theory work committed
+
+The author answered "Yes, commit and push" to the overnight work of entries 36–37. Committed together:
+- `results/theory.md`;
+- the `explore/` scripts and their outputs in `explore/out/`;
+- the dated corrections and additions to `results/results.md`;
+- this log;
+- the `CLAUDE.md` note on `explore/`.
+
+The draft release v0.2.0 (entry 35) is unchanged and still carries `results.md` as it was before entry 37.

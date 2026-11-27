@@ -5,7 +5,7 @@
 **Short answer.** No. On the author's own new 回目, neither diffusion model wrote better couplets than Qwen2.5-7B-Instruct, by the rules or by the author's grades.
 - LLaDA-8B comes close: the author's grades show no detectable difference from Qwen. By the rules it is worse at writing a second line and slightly better at writing a first line.
 - Dream-v0-7B is clearly worse on every measure, mostly because it rarely produces a single line of the right length.
-- The second half of the question can't really be asked. There was no diffusion advantage on the familiar classics either, and no model had memorized them.
+- The second half of the question can't really be asked. There was no diffusion advantage on the familiar classics either, and the models had memorized very few of them: Qwen about 30 of 580, mostly in one direction, and LLaDA a handful. *(Revised 2026-11-26; see the correction in section 3.)*
 
 Everything below is from `results/full_report.md` (automatic scores), `results/grading/grades_report.md` (the author's grades) and `PROTOCOL.md` (every decision, dated). The plan was fixed before the run (`PLAN_FROZEN.md`, hashed in `FROZEN.sha256`).
 
@@ -71,15 +71,35 @@ The sign is the same in all four set-and-condition cells, which the plan counts 
 
 The author's grades don't show the pattern: LLaDA 2.62 on first lines and 2.78 on second lines; Qwen 3.00 and 2.75. With 8–9 cells per direction, they couldn't have shown a difference of this size.
 
-## 3. Memorized couplets: there are none
+*Added 2026-11-26, post hoc (`results/theory.md`):* this pattern is not skill at the tone rule. Neither model follows the rule: whichever line they write, both prefer to end on 平, and Qwen more strongly. On 《火候》 the given line always ends the conventional way, so a model that ignores the rule but prefers 平 passes when writing second lines and fails when writing first lines. That model also does worse in reverse the more strongly it prefers 平.
+
+## 3. Memorized couplets: very few
 
 The recall set was meant to measure couplets the models know by heart. Without a summary, the original line was reproduced exactly:
 - Qwen: 3% of attempts at second lines, 0% at first lines.
-- Every diffusion arm: 0% in both directions.
+- Every diffusion arm: 0% in both directions (rounded).
 
-At this model size the classical 回目 are familiar text, not recited text. Two consequences:
-- **The poem-reversal question can't be tested.** It asks whether diffusion recalls the earlier line better than an autoregressive model, as in the LLaDA paper's poem test. No model recalls either line here.
+Counted by item instead of by attempt, over both conditions:
+- **Qwen** reproduced the original second line for 30 of the 580 classical items (147 attempts), but the original first line for only 4 (7 attempts).
+- **LLaDA 0.7** reproduced 5 items: 1 when writing second lines (3 attempts) and 4 when writing first lines (15 attempts).
+- **Dream:** none.
+
+At this model size most classical 回目 are familiar text, not recited text. Two consequences:
+- **The poem-reversal pattern shows up, but only in partial recall.** The question is whether diffusion recalls the earlier line better than an autoregressive model does, as in the LLaDA paper's poem test.
+  - *Exact recall:* Qwen recalls the next line from the earlier one about 7 times as often as the reverse (30 items against 4, Fisher p < 0.001): the reversal curse. LLaDA shows no forward advantage, and the two models' direction profiles differ (Fisher p = 0.004 on the recalled items). But LLaDA's 5 items are too few to rest on.
+  - *Partial recall,* the share of positions where the answer has the original character, over all 580 items:
+
+    | | Forward | Reverse |
+    |---|---|---|
+    | Qwen | 9.2% | 4.2% |
+    | LLaDA 0.7 | 5.4% | 5.6% |
+    | LLaDA − Qwen | −3.8 [−5.2, −2.5] | +1.4 [+0.6, +2.2] |
+
+    Qwen's recall is lopsided and LLaDA's is symmetric. LLaDA is worse than Qwen in the forward direction and better in reverse: the LLaDA paper's poem result, on 回目. The effect is a few characters per hundred.
+  - *Dream:* almost nothing in either direction (1–1.5%), although it starts from Qwen2.5's weights. Converting the model to diffusion seems to have erased most of the verbatim memory, or its format failures hide it.
 - **The unseen−recall gap means new against familiar,** not new against memorized.
+
+*Correction, 2026-11-26.* The first version of this section said that "no model recalls either line" and that the poem-reversal question could not be tested. Both statements were wrong. The per-attempt rates round to 0–3%, which hid Qwen's 30 recalled items and the direction asymmetry above. The item counts and partial-recall figures come from a post hoc analysis (`explore/recall_direction.py`, `PROTOCOL.md` entry 37), not from the frozen tables; the partial-recall measure is the frozen `ref_same_position` score.
 
 ## 4. Does an advantage survive on new couplets?
 
@@ -103,13 +123,15 @@ This analysis was not in the frozen plan.
 - **The overall verdict:** under one fixed, recorded setup, two open 7–8B diffusion models do not write rule-keeping 回目 more often than a 7B autoregressive model, and the author did not prefer their lines.
 - **A difference in kind, not in level:** LLaDA beats Qwen at ending a first line on 仄 and loses at ending a second line on 平, consistently across sets and conditions.
 - **Dream's weakness is the format:** under this prompt and canvas it mostly writes two-clause sentences instead of one line of the given length. This held at both temperatures and in the pilot.
-- **Memorization:** classical 回目 are not memorized by any of the three models.
+- **Memorization:** few classical 回目 are memorized by any of the three models. What Qwen does recall, it recalls forward only; LLaDA's weaker recall is the same in both directions (section 3, post hoc).
 
 ## What they cannot show
 
 - **The 火候 回目 were drafted with Claude's help,** and the chapter summaries were written by Claude. The unseen references are not independent human couplets, and the summaries may sit closer to the 回目 than an independent reader's would. Relevance is measured against Claude's summaries.
 - **"Unseen" is an assumption.** Qwen2.5 was released in September 2024, LLaDA in February 2025 and Dream (initialised from Qwen2.5) in April 2025. The 火候 回目 are taken to be newer than all three; this study did not verify when they were first published.
 - **The rules mean different things on the two sets.** The classical originals keep the modern end-tone rule only 60% of the time (second lines) and 46% (first lines), against 100% and 98% for 火候. Pass rates on the recall set therefore can't be compared with the unseen set's as if they measured the same thing.
+  - *Added 2026-11-26, post hoc (`results/theory.md` §3.2):* the classics keep a different rule. Their two lines almost always end on different tones (86–100% by novel, classical tones), but which line takes 平 is close to a coin toss.
+  - Scored that way, the originals pass 77% on the recall set instead of 42%, while the models stay near 40%.
 - **One judge and 48 grades.** The author graded 48 of 51 lines and left three blank: one of Qwen's and two of Dream's, both of which mix in English words. These count as missing, not as 1. The author also wrote the reference couplets, and grading was blind to the model, not to the author's own taste.
 - **About half the graded lines were fallbacks.** In 25 of the 51 lines, that model had no rule-passing attempt among its 8 in that cell, so the line came from its other attempts: 12 of Dream's 15 graded lines, 7 of LLaDA's 17 and 4 of Qwen's 16. The grades therefore mix two questions: how good the model's best rule-keeping line is, and how good its ordinary line is.
 - **Small samples:** 43 unseen items and 16–17 graded cells per model give wide intervals. Where this report says "no detectable difference", it means that, not "the same". Many comparisons were made with no correction for multiplicity.

@@ -99,4 +99,5 @@ The frozen settings for phase 1 live in `config/phase1.json`; `run_plan.py` read
 - `tests/`: unit tests for the checker and the extraction rules.
 - `data/unseen/`, `data/recall/`, `data/dev/`: the test sets and the tuning set. `data/lexicon/`: tone tables.
 - `runs/`: raw generations, one JSONL per model and set, with the run settings inside.
-- `results/`: scored tables, the grading sheet, `results.md`.
+- `results/`: scored tables, the grading sheet, `results.md`, and `theory.md` (the post hoc theory note).
+- `explore/`: post hoc, exploratory analyses and probes (PROTOCOL.md entry 36 onward). They read the frozen outputs and never change them; nothing in `explore/` is part of the frozen plan, and none of it may be cited as a pre-registered result.
