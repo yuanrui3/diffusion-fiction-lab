@@ -621,3 +621,18 @@ The author answered "Yes, commit and push" to the overnight work of entries 36�
 - the `CLAUDE.md` note on `explore/`.
 
 The draft release v0.2.0 (entry 35) is unchanged and still carries `results.md` as it was before entry 37.
+
+### 39. Draft release v0.2.0 rebuilt with the 火候 data
+
+Asked whether to rebuild the draft, the author answered: "i am ok with publishing huohou content, it is already public". The curation of entry 35, which kept the unseen set out of the archive, was dropped.
+
+- **Archive:** commit `67e17c8`, child of `80b797a`, on no branch. It is the repository at `80b797a` with one exclusion kept from v0.1.0: the grading dry run (entry 30) and its individual grades, which were never part of the study. The archive's copy of this log carries a scope note at the top, and entry 30 is cut there as in v0.1.0. `.zenodo.json` is at v0.2.0 with a new description.
+- **Included:** the unseen set, every run, the scored results, the author's grades and key, `results/results.md`, `results/theory.md` and `explore/`.
+- **Tag:** `v0.2.0` was moved from the unpublished curated commit `7def136` to `67e17c8` (forced tag update; nothing had been published from it). The release notes were rewritten.
+- **Status:** the release is still a **draft**. Publishing it creates a permanent Zenodo version, so the author decides when.
+
+**Published.** On 2026-11-27 the author answered "Publish it", and the release was published at 20:16 UTC.
+- GitHub delivered the release event to Zenodo, which accepted it (202); its duplicate "released" event got the usual 409.
+- Zenodo archived it as v0.2.0: record 24603992, DOI 10.5281/zenodo.24603992. The all-versions (concept) DOI is 10.5281/zenodo.24448803.
+- The README badge still points at v0.1.0's own DOI (10.5281/zenodo.24448804).
+- At the author's request ("Yes, commit both") the badge was switched to the all-versions DOI, so it always resolves to the latest release. It was committed together with this entry.
