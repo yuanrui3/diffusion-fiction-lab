@@ -1,0 +1,12 @@
+{
+  "title": "Diffusion Fiction Lab: Chinese Chapter-Heading Couplets",
+  "version": "v0.2.0",
+  "description": "<p>Phase 1 of a study of whether diffusion language models (LLaDA-8B-Instruct, Dream-v0-Instruct-7B) write Chinese chapter-heading couplets (回目) better than an autoregressive model of similar size (Qwen2.5-7B-Instruct), on new couplets from the novel 《火候》 and on familiar classical ones. This release completes phase 1: code, data, every generation, the scored results, the author's blind grades, the write-up (results/results.md) and a post hoc theory note with its analyses (results/theory.md, explore/).</p><p>The grading dry run, which was never part of the study, is excluded. Original project materials are MIT-licensed. Wikisource-derived material retains attribution and its documented source terms, including CC BY-SA 4.0 for contributions. See NOTICE.md.</p>",
+  "creators": [
+    {
+      "name": "Chen, Yuanrui"
+    }
+  ],
+  "license": "MIT",
+  "upload_type": "software"
+}

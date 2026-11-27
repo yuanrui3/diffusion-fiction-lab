@@ -1,9 +1,0 @@
-{"item_id": "jhy-003", "direction": "forward", "model": "qwen", "sample": 6, "answer": "骆临海遗书托后人", "passed_all_rules": true, "n_passing_of_8": 4, "entry": "e01", "score": 4, "comment": ""}
-{"item_id": "jhy-007", "direction": "reverse", "model": "qwen", "sample": 0, "answer": "女公子夜半话科场", "passed_all_rules": true, "n_passing_of_8": 1, "entry": "e02", "score": 4, "comment": ""}
-{"item_id": "jhy-007", "direction": "reverse", "model": "llada", "sample": 4, "answer": "老书生海外访名花", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e03", "score": 2, "comment": ""}
-{"item_id": "jhy-033", "direction": "forward", "model": "dream", "sample": 4, "answer": "宫中流出，被板子打", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e04", "score": 1, "comment": ""}
-{"item_id": "jhy-003", "direction": "forward", "model": "llada", "sample": 4, "answer": "骆宾王寄书托子友", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e05", "score": 3, "comment": ""}
-{"item_id": "jhy-033", "direction": "forward", "model": "llada", "sample": 7, "answer": "红颜女穿耳遭痛", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e06", "score": 4, "comment": ""}
-{"item_id": "jhy-003", "direction": "forward", "model": "dream", "sample": 0, "answer": "驼宾王写信托子", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e07", "score": 2, "comment": ""}
-{"item_id": "jhy-007", "direction": "reverse", "model": "dream", "sample": 2, "answer": "唐小山夜中问叔，是否开女", "passed_all_rules": false, "n_passing_of_8": 0, "entry": "e08", "score": 1, "comment": ""}
-{"item_id": "jhy-033", "direction": "forward", "model": "qwen", "sample": 0, "answer": "青丝客蓄髯遭疼", "passed_all_rules": true, "n_passing_of_8": 8, "entry": "e09", "score": 4, "comment": ""}

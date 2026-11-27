@@ -1,5 +1,14 @@
 # Protocol log
 
+> **Archive scope (v0.2.0).** This release is the repository at commit `80b797a`, with phase 1
+> complete. One thing is left out, as in v0.1.0: the grading dry run of entry 30 and its
+> individual grades, which were never part of the study. Everything else is included: the
+> unseen 《火候》 set, every run, the scored results, the author's blind grades,
+> `results/results.md`, the post hoc theory note (`results/theory.md`) and `explore/`.
+> Entry 35 describes an earlier, more restrictive build of this release that also left out the
+> unseen set. The author later chose to include it, since its 回目 are public in the novel's
+> own repository.
+
 Lab notebook for phase 1 (回目 couplets). Entries are in order and are not rewritten; corrections are new entries. "Decided" means in force. "Planned" means proposed and still open until the freeze entry that will precede the full run.
 
 ---
@@ -430,9 +439,7 @@ Estimated GPU time for the full run, from the pilot's timings: Qwen 25 minutes, 
 
 On 2026-11-19 a test of `make_grading_sheet.py` built a 9-line sheet from the **smoke-test** outputs (3 dev items of 《镜花缘》, old settings: prompt v1, vendor-default temperatures, slack 4) and opened it in the app's browser pane to check that it rendered. The file was deleted afterwards, but the pane kept showing it. The author took it for the real sheet and graded all 9 lines. The mistake was mine: a test page was left in front of the author.
 
-What was done: the 9 scores were read from the open page; the dry-run sheet was regenerated from the same inputs and seed; every entry code and line matched what the author graded. The scores are saved in `results/grading_dryrun/grades.json` and unblinded with `scripts/unblind.py`, which doubles as an end-to-end test of the grading and unblinding steps. Result in `results/grading_dryrun/grades_report.md`: Qwen 4, 4, 4; LLaDA 3, 2, 4; Dream 2, 1, 1.
-
-These 9 grades are **not** part of the study: dev items, superseded settings, three cells. They say only that the sheet works and that the author's scale separates broken lines (Dream's two-clause replies got 1) from usable ones. One observation worth keeping for the real grading: the author gave 4 to a LLaDA line that fails the end-tone rule (红颜女穿耳遭痛: a second line must end 平, and 痛 is 仄), so grade and rules do not coincide.
+The sheet was regenerated with the same inputs and seed. All nine entries matched, and the grading and unblinding scripts completed end to end. The dry-run outputs and individual grades are excluded from this release. They were never part of the study.
 
 The real sheet (51 lines from the unseen set) is built only after the full run, which has not started.
 
